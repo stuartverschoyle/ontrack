@@ -14,14 +14,20 @@ const BookList = () => {
   const history = useHistory();
   const path = window.location.pathname;
 
+
+  // set current page number and store in local storage
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
     localStorage.setItem('currentPage', pageNumber);
   };
 
+
+
   useEffect(() => {
+
+    // fetch books with filter
     const fetchBooks = async () => {
-        setLoading(true);
+          setLoading(true);
 
           const params = {
             filters:[{type: "all", values: [bookFilter]}]
@@ -30,12 +36,12 @@ const BookList = () => {
           const res = await axios.post(`http://nyx.vima.ekt.gr:3000/api/books`, params);          
       
           setBooks(res.data.books);
-          console.log(res.data);
           setLoading(false);
     };
 
     fetchBooks();
 
+    // change url depending on page
     history.push(`${path}?page=${localStorage.getItem('currentPage') ? localStorage.getItem('currentPage') : currentPage}`);
 
   }, [currentPage, history, path, bookFilter]);
@@ -50,7 +56,7 @@ const BookList = () => {
         <h1 className="text-primary mb-3">On Track - pagination test</h1>
         <div class="form-group">
             <label for="filterInput">Search</label>
-            <input type="text" class="form-control" id="filterInput" placeholder="Please enter a search term" onChange={e => setBookFilter(e.target.value)} />
+            <input type="text" class="form-control" id="filterInput" placeholder="Please enter a search term" onChange={e => {setBookFilter(e.target.value);paginate(1)}} />
         </div>       
         <BookTable books={currentBooks} loading={loading} />
         <Pagination booksPerPage={booksPerPage} totalBooks={books.length} paginate={paginate} />

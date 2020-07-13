@@ -2,15 +2,13 @@ import React from 'react';
 import { Table, Container } from "react-bootstrap";
 
 
+// display books in a table
+
 const Books = ({ books, loading}) => {
 
-
-   
     if(loading){
         return <h2>Loading...</h2>;
     }
-
-
 
     return (
         <Container>
